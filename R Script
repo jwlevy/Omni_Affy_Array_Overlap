@@ -1,0 +1,14 @@
+AFFY_CNV_LOC$OmniSNP <- NA
+OmniSNP <- NULL
+
+library(parallel)
+library(foreach)
+library(doParallel)
+cl <- makeCluster(8)
+registerDoParallel(cl)
+foreach(i=1:10) %dopar% {
+  temp <- Omni5_4v1.1$Name[which(Omni5_4v1.1$MapInfo >= AFFY_CNV_LOC$CStart[i] & 
+                                   Omni5_4v1.1$MapInfo <= AFFY_CNV_LOC$CStop[i])]
+  AFFY_CNV_LOC$OmniSNP[i] <- paste(temp, collapse=';')
+  if(length(temp)>0) OmniSNP <- c(OmniSNP, temp)
+}
